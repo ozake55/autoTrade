@@ -15,7 +15,7 @@ public class Login {
 	public static void main(String[] args) throws IOException {
 		//header
 		
-		//おそらくauto
+		//おそらくautoaa
 		//Content-Length: 552
 		
 		////////
