@@ -18,7 +18,12 @@ public class Login {
 	static String userid = System.getenv("userid");
 	static String password = System.getenv("password");
 	
+	static String baseURL = "https://site1.sbisec.co.jp"+"/ETGate/";
+	static Response res = null;
+	static Document doc = null;
+
 	static Connection getConnect(String strUrl) throws MalformedURLException {
+		
 		 Connection conn = null;
 		 
 		 URL url = new URL(strUrl);
@@ -36,11 +41,10 @@ public class Login {
 		 return conn;
 	}
 	public static void main(String[] args) throws IOException {
-        Response res = null;
-        Document doc = null;
-
-        String strURL = "https://site1.sbisec.co.jp"+"/ETGate/";
-        Connection conn = getConnect(strURL);
+        
+        //"https://site1.sbisec.co.jp/ETGate/?_ControlID=WPLETacR001Control&_PageID=DefaultPID&_DataStoreID=DSWPLETacR001Control&_SeqNo=1524818118079_default_task_614_DefaultPID_DefaultAID&getFlg=on&_ActionID=DefaultAID";
+        //Connection conn = getConnect(strURL");
+        Connection conn = getConnect(baseURL+"?_ControlID=WPLETacR001Control&_PageID=DefaultPID&_DataStoreID=DSWPLETacR001Control&_SeqNo=1524818118079_default_task_614_DefaultPID_DefaultAID&getFlg=on&_ActionID=DefaultAID");
     try {
             res = conn.method(Method.GET).execute();
             doc = res.parse();
@@ -52,7 +56,8 @@ public class Login {
         }
 
     //ログイン画面のinput tag を取得
-        Elements form_login = doc.getElementsByAttributeValue("name","form_login");
+        //Elements form_login = doc.getElementsByAttributeValue("name","form_login");
+        Elements form_login = doc.getElementsByAttributeValue("name","MyForm01");
         Elements inputs = form_login.get(0).getElementsByTag("input");
 
         if (form_login.isEmpty()) {
@@ -68,18 +73,15 @@ public class Login {
             param.put(ele.attr("name"), ele.attr("value"));
         }
         //追加
+        //param.remove("ACT_login");
+        //param.put("ACT_login.x", "131");
+        //param.put("ACT_login.y", "15");
+        //param.put("BW_FLG", "chrome,65");
+        //param.put("JS_FLG", "1");
         param.put("user_id", userid);
         param.put("user_password", password);
         
-        param.remove("ACT_login");
-        param.put("ACT_login.x", "94");
-        param.put("ACT_login.y", "16");
-        
-        param.put("BW_FLG", "chrome,65");
-        param.put("JS_FLG", "1");
-        param.put("_ActionID", "login");
-
-        conn = getConnect(strURL);
+        conn = getConnect(baseURL);
         try {
             res = conn.data(param).cookies(res.cookies()).method(Method.POST).execute();
         } catch (IOException e) {
@@ -87,8 +89,7 @@ public class Login {
             return;
         }
         doc = res.parse();
-        //doc = conn.data(param).cookies(res.cookies()).post();
-        //System.out.println(doc.html());
+        System.out.println(doc.html());
         ////////
         
         ////////
@@ -96,7 +97,7 @@ public class Login {
         Elements formSwitch = doc.getElementsByAttributeValue("name","formSwitch");
         if (!formSwitch.isEmpty()) {
         	//String formSwitch_action = formSwitch.attr("action");
-        	strURL = formSwitch.attr("action");
+        	baseURL = formSwitch.attr("action");
         	
         	Elements formSwitch_inputs = formSwitch.get(0).getElementsByTag("input");
             //ログインに必要なパラメータの設定
@@ -104,7 +105,7 @@ public class Login {
             for(Element ele :formSwitch_inputs){
             	formSwitch_param.put(ele.attr("name"), ele.attr("value"));
             }
-            conn = getConnect(strURL);
+            conn = getConnect(baseURL);
             try {
                 res = conn.data(formSwitch_param).cookies(res.cookies()).method(Method.POST).execute();
             } catch (IOException e) {
@@ -115,8 +116,18 @@ public class Login {
             ////////
         }
         //ログイン後画面
-        //System.out.println(doc.html());      
+        System.out.println(doc.html());      
 
+        //判定
+        if (res.cookies().containsKey("trading_site")) {
+        	System.out.println("success");
+            return;
+        } else {
+        	System.out.println("false");
+            return;
+        }
+        
+        /*
         ////////
         //口座管理画面遷移
         String AccountStrUrl =strURL+"?_ControlID=WPLETacR001Control&_PageID=DefaultPID&_DataStoreID=DSWPLETacR001Control&_ActionID=DefaultAID&getFlg=on";
@@ -130,15 +141,7 @@ public class Login {
         }
         doc = res.parse();
         System.out.println(doc.html());
+         */
         
-        
-        //判定
-        if (res.cookies().containsKey("trading_site")) {
-        	System.out.println("success");
-            return;
-        } else {
-        	System.out.println("false");
-            return;
-        }
 	}
 }
