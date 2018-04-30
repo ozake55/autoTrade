@@ -42,9 +42,8 @@ public class Login {
 	}
 	public static void main(String[] args) throws IOException {
         
-        //"https://site1.sbisec.co.jp/ETGate/?_ControlID=WPLETacR001Control&_PageID=DefaultPID&_DataStoreID=DSWPLETacR001Control&_SeqNo=1524818118079_default_task_614_DefaultPID_DefaultAID&getFlg=on&_ActionID=DefaultAID";
         //Connection conn = getConnect(strURL");
-        Connection conn = getConnect(baseURL+"?_ControlID=WPLETacR001Control&_PageID=DefaultPID&_DataStoreID=DSWPLETacR001Control&_SeqNo=1524818118079_default_task_614_DefaultPID_DefaultAID&getFlg=on&_ActionID=DefaultAID");
+        Connection conn = getConnect(baseURL+"?_ControlID=WPLETacR001Control&_PageID=DefaultPID&_DataStoreID=DSWPLETacR001Control&getFlg=on&_ActionID=DefaultAID");
     try {
             res = conn.method(Method.GET).execute();
             doc = res.parse();
@@ -96,7 +95,7 @@ public class Login {
         //formSwitch check
         Elements formSwitch = doc.getElementsByAttributeValue("name","formSwitch");
         if (!formSwitch.isEmpty()) {
-        	//String formSwitch_action = formSwitch.attr("action");
+        	
         	baseURL = formSwitch.attr("action");
         	
         	Elements formSwitch_inputs = formSwitch.get(0).getElementsByTag("input");
@@ -130,7 +129,6 @@ public class Login {
         /*
         ////////
         //口座管理画面遷移
-        String AccountStrUrl =strURL+"?_ControlID=WPLETacR001Control&_PageID=DefaultPID&_DataStoreID=DSWPLETacR001Control&_ActionID=DefaultAID&getFlg=on";
         //レスポンスから必要情報の抽出
         conn = getConnect(AccountStrUrl);
         try {
