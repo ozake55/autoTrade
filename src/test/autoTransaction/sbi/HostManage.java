@@ -27,11 +27,15 @@ public class HostManage {
 
 	public Response formSwitch(Response res) throws IOException {
 
+		
 		Connection conn = null;
 		Document doc = null;
 
+		//これをやらないと、通常res.parse();は一度しかできない
+		//res.bufferUp();
+		
 		doc = res.parse();
-		System.out.println(doc.html());
+		//System.out.println(doc.html());
 		////////
 
 		////////
@@ -58,6 +62,23 @@ public class HostManage {
 		return res;
 	}
 
+	HashMap<String, String> getParam(Elements inputs) {
+		// ログイン
+		// formパラメータの設定
+		HashMap<String, String> param = new HashMap<String, String>();
+		for (Element ele : inputs) {
+			// input tagを再設定
+			param.put(ele.attr("name"), ele.attr("value"));
+		}
+		// 追加
+		// param.remove("ACT_login");
+		// param.put("ACT_login.x", "131");
+		// param.put("ACT_login.y", "15");
+		// param.put("BW_FLG", "chrome,65");
+		// param.put("JS_FLG", "1");
+		return param;
+	}
+	
 	Connection getConnect(String query) throws MalformedURLException {
 
 		Connection conn = null;

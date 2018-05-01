@@ -31,6 +31,11 @@ public class Login {
 		//query = _query;
 	}
 	
+	/*
+	Response logout(String _query) throws IOException {
+		
+	}
+	*/
 	
 	Response execute(String _query) throws IOException {
 		
@@ -60,20 +65,12 @@ public class Login {
 		Elements inputs = form_login.get(0).getElementsByTag("input");
 
 
-		
+		host.getParam(inputs);
 		////////
-		// パラメータの設定
-		HashMap<String, String> param = new HashMap<String, String>();
-		for (Element ele : inputs) {
-			// input tagを再設定
-			param.put(ele.attr("name"), ele.attr("value"));
-		}
-		// 追加
-		// param.remove("ACT_login");
-		// param.put("ACT_login.x", "131");
-		// param.put("ACT_login.y", "15");
-		// param.put("BW_FLG", "chrome,65");
-		// param.put("JS_FLG", "1");
+		//ログイン
+		// formパラメータの設定
+		HashMap<String, String> param;
+		param = host.getParam(inputs);
 		param.put("user_id", userid);
 		param.put("user_password", password);
 
@@ -81,12 +78,21 @@ public class Login {
 
 		//formSwitch＋ログイン
 		res = host.formSwitch(conn.data(param).cookies(res.cookies()).method(Method.POST).execute());
-		// doc = res.parse();
-		// System.out.println(doc.html());
-
-		doc = res.parse();
 		// ログイン後の画面
-		System.out.println(doc.html());
+		//doc = res.parse();
+		//System.out.println(doc.html());
+		
+		////////
+		//ログイン後の画面は口座画面かチェック（お知らせ等表示される場合がある）
+
+		//もしも、口座画面で無い場合、再度ログイン画面に遷移
+		conn = host.getConnect(_query);
+		res = conn.cookies(res.cookies()).method(Method.GET).execute();
+		//res = host.formSwitch(conn.cookies(res.cookies()).method(Method.GET).execute());
+		
+		//なぜかcookie無い。。
+		//
+		////////
 		
 		return res;
 	}
@@ -102,9 +108,14 @@ public class Login {
 		String startQuery = "_ControlID=WPLETacR001Control&_DataStoreID=DSWPLETacR001Control&_PageID=DefaultPID&_ActionID=DefaultAID&getFlg=on";
 		//ホーム
 		//String startQuery =  "_ControlID=WPLEThmR001Control&_DataStoreID=DSWPLEThmR001Control&_PageID=DefaultPID&_ActionID=DefaultAID&getFlg=on";
+		//String logoutQuery = "_ControlID=WPLETlgR001Control&_DataStoreID=DSWPLETlgR001Control&_PageID=WPLETlgR001Rlgn50&_ActionID=logout&getFlg=on";
 
 		res = login.execute(startQuery);
 
+		// ログイン後の画面
+		doc = res.parse();
+		System.out.println(doc.html());
+		
 		// 判定
 		if (res.cookies().containsKey("trading_site")) {
 			System.out.println("success");
