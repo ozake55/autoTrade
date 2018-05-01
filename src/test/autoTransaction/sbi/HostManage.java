@@ -32,7 +32,7 @@ public class HostManage {
 		Document doc = null;
 
 		//これをやらないと、通常res.parse();は一度しかできない
-		//res.bufferUp();
+		res.bufferUp();
 		
 		doc = res.parse();
 		//System.out.println(doc.html());

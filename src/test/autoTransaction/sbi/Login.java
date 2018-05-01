@@ -81,19 +81,26 @@ public class Login {
 		// ログイン後の画面
 		//doc = res.parse();
 		//System.out.println(doc.html());
+		/////
+		
+		////
+		//ログインできているか、response headerのcookieをチェック。
+		//以後のresponseには新たなset-cookieは含まれないので注意
+				if (res.cookies().containsKey("trading_site")) {
+					System.out.println("success");
+				} else {
+					System.out.println("false");
+				}
 		
 		////////
 		//ログイン後の画面は口座画面かチェック（お知らせ等表示される場合がある）
 
 		//もしも、口座画面で無い場合、再度ログイン画面に遷移
 		conn = host.getConnect(_query);
-		res = conn.cookies(res.cookies()).method(Method.GET).execute();
-		//res = host.formSwitch(conn.cookies(res.cookies()).method(Method.GET).execute());
-		
-		//なぜかcookie無い。。
-		//
-		////////
-		
+		//res = conn.cookies(res.cookies()).method(Method.GET).execute();
+		//formSwitchはログイン時だけだと思う。。
+		res = host.formSwitch(conn.cookies(res.cookies()).method(Method.GET).execute());
+		////////		
 		return res;
 	}
 	
@@ -116,21 +123,6 @@ public class Login {
 		doc = res.parse();
 		System.out.println(doc.html());
 		
-		// 判定
-		if (res.cookies().containsKey("trading_site")) {
-			System.out.println("success");
-			return;
-		} else {
-			System.out.println("false");
-			return;
-		}
-
-		/*
-		 * //////// //口座管理画面遷移 //レスポンスから必要情報の抽出 conn = getConnect(AccountStrUrl); try {
-		 * res = conn.cookies(res.cookies()).method(Method.GET).execute(); } catch
-		 * (IOException e) { e.printStackTrace(); return; } doc = res.parse();
-		 * System.out.println(doc.html());
-		 */
 
 	}
 }
