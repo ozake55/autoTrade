@@ -68,6 +68,7 @@ public class Login {
 	
 	Response login(String _query) throws IOException {
 
+		
 		Connection conn = host.getConnect(_query);
 
 		res = conn.method(Method.GET).execute();
