@@ -20,7 +20,13 @@ public class LoginProcess {
 	
 	
 	static final String hostAndPath = "https://site1.sbisec.co.jp" + "/ETGate/";
-	static final String startQuery = "_ControlID=WPLETacR001Control&_DataStoreID=DSWPLETacR001Control&_PageID=DefaultPID&_ActionID=DefaultAID&getFlg=on";
+	
+	//ログイン専用
+	static final String startQuery = "_ControlID=WPLETlgR001Control&_DataStoreID=DSWPLETlgR001Control&_PageID=WPLETlgR001Rlgn50&_ActionID=login&getFlg=on";
+	
+	//口座一覧
+	//static final String startQuery = "_ControlID=WPLETacR001Control&_DataStoreID=DSWPLETacR001Control&_PageID=DefaultPID&_ActionID=DefaultAID&getFlg=on";
+	static final String accountListQuery = "_ControlID=WPLETacR001Control&_DataStoreID=DSWPLETacR001Control&_PageID=DefaultPID&_ActionID=DefaultAID&getFlg=on";
 	//ホーム
 	//String startQuery =  "_ControlID=WPLEThmR001Control&_DataStoreID=DSWPLEThmR001Control&_PageID=DefaultPID&_ActionID=DefaultAID&getFlg=on";
 	static final String logoutQuery = "_ControlID=WPLETlgR001Control&_DataStoreID=DSWPLETlgR001Control&_PageID=WPLETlgR001Rlgn50&_ActionID=logout&getFlg=on";
@@ -30,10 +36,10 @@ public class LoginProcess {
 	static Document doc = null;
 	
 	///////
-	HostManage hostMng = null;
+	SbiUtil hostMng = null;
 	
 	LoginProcess(){
-		hostMng = new HostManage(hostAndPath);
+		hostMng = new SbiUtil(hostAndPath);
 	}
 	
 	
@@ -58,19 +64,25 @@ public class LoginProcess {
 		// ログイン
 		// formパラメータの設定
 		HashMap<String, String> param;
+		
+		//inputs elementからform param 生成
 		param = hostMng.getParam(inputs);
+		
 		param.put("user_id", userid);
 		param.put("user_password", password);
 		//param.put("user_id", "yamada");
 		//param.put("user_password", "tarou1234");
+		
+		//置き換え
+		param.put("_ActionID", "loginAcInfo");
 
 		conn = hostMng.getConnect("");
 
 		// formSwitch＋ログイン
 		res = hostMng.formSwitch(conn.data(param).cookies(res.cookies()).method(Method.POST).execute());
 		// ログイン後の画面
-		// doc = res.parse();
-		// System.out.println(doc.html());
+		//doc = res.parse();
+		//System.out.println(doc.html());
 		/////
 
 		////
@@ -87,7 +99,7 @@ public class LoginProcess {
 		// ログイン後の画面は口座画面かチェック（お知らせ等表示される場合がある）
 
 		// もしも、口座画面で無い場合、再度ログイン画面に遷移
-		conn = hostMng.getConnect(startQuery);
+		conn = hostMng.getConnect(accountListQuery);
 		// formSwitchはログイン時だけだと思う。。
 		// res = conn.cookies(res.cookies()).method(Method.GET).execute();
 		res = hostMng.formSwitch(conn.cookies(res.cookies()).method(Method.GET).execute());

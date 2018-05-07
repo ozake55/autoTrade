@@ -13,11 +13,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class HostManage {
+public class SbiUtil {
 
 	String baseURL = null;
 
-	HostManage(String _baseURL) {
+	SbiUtil(String _baseURL) {
 		this.baseURL = _baseURL;
 	}
 
