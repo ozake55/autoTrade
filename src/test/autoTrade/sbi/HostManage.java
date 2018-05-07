@@ -1,4 +1,4 @@
-package test.autoTransaction.sbi;
+package test.autoTrade.sbi;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
