@@ -16,17 +16,21 @@ public class AutoTrade {
 		String password = System.getenv("password");
 		
 		// TODO Auto-generated method stub
-		LoginLogout loginProcess = new LoginLogout();
+		Login loginProc = Login.getInstance();
 				
-		res = loginProcess.login(userid, password);
-		if (res != null){
+		//if ( ((Login) loginProc).login(userid, password) ) {
+		if (loginProc.login(userid, password) ) {
+
+			InterfaceScreen accountListYenProc = new AccountListYen(loginProc);
+
 			// ログイン後の画面
-			doc = res.parse();
+			doc = accountListYenProc.getScreen();
+			//doc = res.parse();
 			System.out.println(doc.html());
 			
 			//LOGOUT
-			loginProcess.logout();
-		}
+			//((LoginLogout) loginProc).logout();
+		}		
 	}
 
 }
