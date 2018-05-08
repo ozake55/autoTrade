@@ -16,7 +16,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
-public class LoginProcess {
+public class LoginLogout {
 	
 	
 	static final String hostAndPath = "https://site1.sbisec.co.jp" + "/ETGate/";
@@ -38,7 +38,7 @@ public class LoginProcess {
 	///////
 	SbiUtil hostMng = null;
 	
-	LoginProcess(){
+	LoginLogout(){
 		hostMng = new SbiUtil(hostAndPath);
 	}
 	

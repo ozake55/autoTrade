@@ -16,7 +16,7 @@ public class AutoTrade {
 		String password = System.getenv("password");
 		
 		// TODO Auto-generated method stub
-		LoginProcess loginProcess = new LoginProcess();
+		LoginLogout loginProcess = new LoginLogout();
 				
 		res = loginProcess.login(userid, password);
 		if (res != null){

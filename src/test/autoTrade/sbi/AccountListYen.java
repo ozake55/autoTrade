@@ -1,5 +1,5 @@
 package test.autoTrade.sbi;
 
-public class AccountListYenProcess {
+public class AccountListYen {
 
 }
