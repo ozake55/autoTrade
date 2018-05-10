@@ -47,8 +47,8 @@ public class Login {
 	
 	boolean login(String userid, String password) throws IOException {
 		
+		//ログイン前はformSwitch必要なし
 		Connection conn = sbiUtil.getConnect(startQuery);
-
 		res = conn.method(Method.GET).execute();
 		doc = res.parse();
 
@@ -79,10 +79,12 @@ public class Login {
 		//param.put("_ActionID", "loginAcInfo");
 		param.put("_ActionID", "loginPortfolio");
 		
+		res = connectMethodPost("",param);
+		/*
 		conn = sbiUtil.getConnect("");
-
-		// formSwitch＋ログイン
 		res = sbiUtil.formSwitch(conn.data(param).cookies(res.cookies()).method(Method.POST).execute());
+		*/
+		
 		// ログイン後の画面
 		//doc = res.parse();
 		//System.out.println(doc.html());
@@ -124,7 +126,7 @@ public class Login {
 		Connection conn = sbiUtil.getConnect(logoutQuery);
 		// res = conn.cookies(res.cookies()).method(Method.GET).execute();
 		// formSwitchはログイン時だけだと思うけど。。
-		res = sbiUtil.formSwitch(conn.cookies(res.cookies()).method(Method.GET).execute());
+		sbiUtil.formSwitch(conn.cookies(res.cookies()).method(Method.GET).execute());
 
 		doc = res.parse();
 		// System.out.println(doc.html());
@@ -160,6 +162,13 @@ public class Login {
 		// formSwitchはログイン時だけだと思う。。
 		// res = conn.cookies(res.cookies()).method(Method.GET).execute();
 		res = sbiUtil.formSwitch(conn.cookies(res.cookies()).method(Method.GET).execute());
+		return res;
+	}
+	
+	public Response connectMethodPost(String query, HashMap<String, String> param) throws IOException {
+		Connection conn = sbiUtil.getConnect(query);
+		// formSwitch＋ログイン
+		res = sbiUtil.formSwitch(conn.data(param).cookies(res.cookies()).method(Method.POST).execute());
 		return res;
 	}
 }
