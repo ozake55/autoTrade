@@ -163,7 +163,6 @@ public class Login {
 	public Document connectMethodGet(String query) throws IOException {
 		res = conGet(query);
 		doc = res.parse();
-		res = null;
 		return doc;
 	}
 
