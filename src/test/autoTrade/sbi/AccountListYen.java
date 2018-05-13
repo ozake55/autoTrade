@@ -15,11 +15,12 @@ public class AccountListYen implements InterfaceScreen {
 	
 	static final String accountListQuery = "_ControlID=WPLETacR001Control&_DataStoreID=DSWPLETacR001Control&_PageID=DefaultPID&_ActionID=DefaultAID&getFlg=on";
 
-	//<div class="title-text"><b>口座サマリー</b></div>
+	static final String AccountListYenIndicateMes = "口座サマリー";
+	
+	
+	
+	//それ以外はエラー
 
-	///////
-	//Response res = null;
-	//SbiUtil sbiUtil = null;
 	Login login = null;
 	///////
 
@@ -47,11 +48,29 @@ public class AccountListYen implements InterfaceScreen {
 	}
 	*/
 	
-	public Document getScreen() throws IOException {
+	public boolean getScreen() throws IOException {
 
-		Response res = login.connectMethodGet(accountListQuery);
-		return res.parse();
+		login.doc = login.connectMethodGet(accountListQuery);
 		
+		Elements div = login.doc.getElementsByAttributeValue("class", "title-text");
+		for (Element ele : div) {
+			List<Node> nodes = ele.childNodes();
+			for (Node node : nodes) {
+				if (node instanceof Element) {
+					Elements p = ((Element) node).getElementsByTag("b");
+					for (Element element : p) {
+						//口座サマリー
+						System.out.println(element.childNode(0).toString().trim());
+						if (AccountListYenIndicateMes.equals(element.childNode(0).toString().trim())) {
+							return true;							
+						}
+					}
+				}
+			}
+		}
+		return false;
+	
+
 		/*
 		SbiUtil sbiUtil = login.getSbiUtil();
 		Connection conn = sbiUtil.getConnect(accountListQuery);

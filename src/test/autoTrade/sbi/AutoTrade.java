@@ -20,16 +20,22 @@ public class AutoTrade {
 				
 		//if ( ((Login) loginProc).login(userid, password) ) {
 		if (loginProc.login(userid, password) ) {
+			//ログイン成功
+			
+			//LOGOUT
+			//loginProc.logout();			
 
 			InterfaceScreen accountListYenProc = new AccountListYen(loginProc);
 
-			// ログイン後の画面
-			doc = accountListYenProc.getScreen();
-			//doc = res.parse();
-			System.out.println(doc.html());
+			//画面
+			if(accountListYenProc.getScreen()) {
+				System.out.println(loginProc.doc.html());
+			}else {
 			
-			//LOGOUT
-			//((LoginLogout) loginProc).logout();
+			//LOGOUT	2回読んでも問題なし
+			//loginProc.logout();
+			}
+			
 		}		
 	}
 

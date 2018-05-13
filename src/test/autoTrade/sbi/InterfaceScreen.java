@@ -12,5 +12,5 @@ public interface InterfaceScreen {
 	//void setRes(Response res);
 	//SbiUtil getSbiUtil();
 	//void setSbiUtil(SbiUtil sbiUtil);
-	Document getScreen() throws IOException;
+	boolean getScreen() throws IOException;
 }

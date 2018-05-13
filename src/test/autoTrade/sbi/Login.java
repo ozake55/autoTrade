@@ -30,9 +30,9 @@ public class Login {
 
 	static final String logoutIndicateMes = "SBI証券をご利用いただきありがとうございました。";
 	
-	static Document doc = null;
 	
 	///////
+	Document doc = null;
 	Response res = null;
 	SbiUtil sbiUtil = null;
 	///////
@@ -49,7 +49,17 @@ public class Login {
 		
 		//ログイン前はformSwitch必要なし
 		Connection conn = sbiUtil.getConnect(startQuery);
-		res = conn.method(Method.GET).execute();
+		
+		//redirectを行いたくない場合は、.followRedirects(false).execute();
+		res = conn.method(Method.GET)
+				//.followRedirects(false)
+				.execute();
+		
+		//resをチェック。302か307の場合はメンテナンス中と判断？それとも、redirect後、formが取れなかったらで判断？
+		//→通常のログイン画面でredirectしているか？
+		//
+		//maintenanceException
+		
 		doc = res.parse();
 
 		// ログイン画面のinput tag を取得。ログイン後の画面によってform名が異なるので注意！
@@ -80,10 +90,6 @@ public class Login {
 		param.put("_ActionID", "loginPortfolio");
 		
 		res = connectMethodPost("",param);
-		/*
-		conn = sbiUtil.getConnect("");
-		res = sbiUtil.formSwitch(conn.data(param).cookies(res.cookies()).method(Method.POST).execute());
-		*/
 		
 		// ログイン後の画面
 		//doc = res.parse();
@@ -98,6 +104,7 @@ public class Login {
 			System.out.println("login success");
 			return true;
 		} else {
+			
 			System.out.println("login false");
 			return false;
 		}
@@ -123,17 +130,13 @@ public class Login {
 			return false;
 		}
 
-		Connection conn = sbiUtil.getConnect(logoutQuery);
-		// res = conn.cookies(res.cookies()).method(Method.GET).execute();
-		// formSwitchはログイン時だけだと思うけど。。
-		sbiUtil.formSwitch(conn.cookies(res.cookies()).method(Method.GET).execute());
-
-		doc = res.parse();
-		// System.out.println(doc.html());
+		//Connection conn = sbiUtil.getConnect(logoutQuery);
+		//sbiUtil.formSwitch(conn.cookies(res.cookies()).method(Method.GET).execute());
+		doc = connectMethodGet(logoutQuery);
+		//System.out.println(doc.html());
 
 		Elements div = doc.getElementsByAttributeValue("class", "alC");
 
-		//ArrayList<String> list = new ArrayList<>();
 		for (Element ele : div) {
 			List<Node> nodes = ele.childNodes();
 			for (Node node : nodes) {
@@ -155,20 +158,39 @@ public class Login {
 		}
 		return false;
 	}
+	
+	
+	public Document connectMethodGet(String query) throws IOException {
+		res = conGet(query);
+		doc = res.parse();
+		res = null;
+		return doc;
+	}
 
-	public Response connectMethodGet(String query) throws IOException {
+	private Response conGet(String query) throws IOException {
 		
 		Connection conn = sbiUtil.getConnect(query);
-		// formSwitchはログイン時だけだと思う。。
-		// res = conn.cookies(res.cookies()).method(Method.GET).execute();
-		res = sbiUtil.formSwitch(conn.cookies(res.cookies()).method(Method.GET).execute());
+		res = connectExp(conn.cookies(res.cookies()).method(Method.GET).execute());
 		return res;
 	}
 	
-	public Response connectMethodPost(String query, HashMap<String, String> param) throws IOException {
+	private Response connectMethodPost(String query, HashMap<String, String> param) throws IOException {
 		Connection conn = sbiUtil.getConnect(query);
 		// formSwitch＋ログイン
-		res = sbiUtil.formSwitch(conn.data(param).cookies(res.cookies()).method(Method.POST).execute());
+		res = connectExp(conn.data(param).cookies(res.cookies()).method(Method.POST).execute());
 		return res;
 	}
+	
+	public Response connectExp(Response res) throws IOException {
+		// formSwitchはログイン時だけだと思う。。
+		res = sbiUtil.formSwitch(res);
+		
+		//sessionが切れているかチェック
+		
+		//IOExceptionとlogoutExceptionをcatchしてハンドリング
+		
+		
+		return res;
+	}
+	
 }

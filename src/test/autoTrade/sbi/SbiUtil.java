@@ -14,6 +14,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class SbiUtil {
+	
+	static final String logoutMes = "口座をお持ちのお客様はログインしてください。";
+
 
 	String baseURL = null;
 
@@ -40,6 +43,7 @@ public class SbiUtil {
 
 		////////
 		// formSwitch check
+		//formSwitchはSBI独自ルールのため
 		Elements formSwitch = doc.getElementsByAttributeValue("name", "formSwitch");
 
 		if (!formSwitch.isEmpty()) {
@@ -59,6 +63,23 @@ public class SbiUtil {
 			// System.out.println(doc.html());
 			////////
 		}
+		
+		//ログアウトしているかどうか判定
+		//ログアウトしている状態
+		Elements logoutElements = doc.getElementsByAttributeValue("class", "fll01 bold");
+		if (!logoutElements.isEmpty()) {
+			Element element = logoutElements.get(0);
+			//<p class="fll01 bold">口座をお持ちのお客様はログインしてください。</p>
+			if (logoutMes.equals(element.childNode(0).toString().trim())) {
+				//ログアウトしている状態
+				System.out.println(element.childNode(0).toString().trim());
+				//logoutExceptionをthrow
+				
+			}
+		}
+
+				
+			
 		return res;
 	}
 
