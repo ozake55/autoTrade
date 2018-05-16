@@ -12,6 +12,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
+import test.autoTrade.exception.FailedToGetInputScreenException;
+
 public class Login {
 	
 	private static Login loginSingleton = new Login();
@@ -45,7 +47,7 @@ public class Login {
 		return loginSingleton;
 	}
 	
-	boolean login(String userid, String password) throws IOException {
+	boolean login(String userid, String password) throws IOException, FailedToGetInputScreenException {
 		
 		//ログイン前はformSwitch必要なし
 		Connection conn = sbiUtil.getConnect(startQuery);
@@ -66,7 +68,7 @@ public class Login {
 		Elements form_login = doc.getElementsByAttributeValue("name", "MyForm01");
 		if (form_login.isEmpty()) {
 			System.out.println("form_login = null");
-			return false;
+			throw new FailedToGetInputScreenException();
 		}
 
 		Elements inputs = form_login.get(0).getElementsByTag("input");
