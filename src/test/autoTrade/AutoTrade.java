@@ -1,4 +1,4 @@
-package test.autoTrade.sbi;
+package test.autoTrade;
 
 import java.io.IOException;
 
@@ -6,6 +6,9 @@ import org.jsoup.Connection.Response;
 import org.jsoup.nodes.Document;
 
 import test.autoTrade.exception.FailedToGetInputScreenException;
+import test.autoTrade.sbi.AccountListYen;
+import test.autoTrade.sbi.InterfaceScreen;
+import test.autoTrade.sbi.LoginSbi;
 
 public class AutoTrade {
 
@@ -18,7 +21,7 @@ public class AutoTrade {
 		String password = System.getenv("password");
 
 		// TODO Auto-generated method stub
-		Login loginProc = Login.getInstance();
+		LoginSbi loginProc = LoginSbi.getInstance();
 
 		// if ( ((Login) loginProc).login(userid, password) ) {
 		try {

@@ -21,21 +21,21 @@ public class AccountListYen implements InterfaceScreen {
 	
 	//それ以外はエラー
 
-	Login login = null;
+	LoginSbi login = null;
 	///////
 
-	public Login getLogin() {
+	public LoginSbi getLogin() {
 		return login;
 	}
 
-	public void setLogin(Login login) {
+	public void setLogin(LoginSbi login) {
 		this.login = login;
 	}
 
 	/*
 	 * コンストラクタ
 	 */
-	AccountListYen(Login _login){
+	public AccountListYen(LoginSbi _login){
 		login = _login;
 	}
 

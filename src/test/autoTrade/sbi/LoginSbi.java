@@ -12,11 +12,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
+import test.autoTrade.Login;
 import test.autoTrade.exception.FailedToGetInputScreenException;
 
-public class Login {
+public class LoginSbi extends Login {
 	
-	private static Login loginSingleton = new Login();
+	private static LoginSbi loginSingleton = new LoginSbi();
 		
 	static final String hostAndPath = "https://site1.sbisec.co.jp" + "/ETGate/";
 	
@@ -34,20 +35,18 @@ public class Login {
 	
 	
 	///////
-	Document doc = null;
-	Response res = null;
-	SbiUtil sbiUtil = null;
+	UtilSbi sbiUtil = null;
 	///////
 
-	private Login(){
-		sbiUtil = new SbiUtil(hostAndPath);
+	private LoginSbi(){
+		sbiUtil = new UtilSbi(hostAndPath);
 	}
 	
-	public static Login getInstance() {
+	public static LoginSbi getInstance() {
 		return loginSingleton;
 	}
 	
-	boolean login(String userid, String password) throws IOException, FailedToGetInputScreenException {
+	public boolean login(String userid, String password) throws IOException, FailedToGetInputScreenException {
 		
 		//ログイン前はformSwitch必要なし
 		Connection conn = sbiUtil.getConnect(startQuery);

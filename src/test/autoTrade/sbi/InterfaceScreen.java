@@ -6,8 +6,8 @@ import org.jsoup.Connection.Response;
 import org.jsoup.nodes.Document;
 
 public interface InterfaceScreen {
-	Login getLogin();
-	void setLogin(Login login);
+	LoginSbi getLogin();
+	void setLogin(LoginSbi login);
 	//Response getRes();
 	//void setRes(Response res);
 	//SbiUtil getSbiUtil();

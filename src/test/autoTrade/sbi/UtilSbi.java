@@ -13,14 +13,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class SbiUtil {
+public class UtilSbi {
 	
 	static final String logoutMes = "口座をお持ちのお客様はログインしてください。";
 
 
 	String baseURL = null;
 
-	SbiUtil(String _baseURL) {
+	UtilSbi(String _baseURL) {
 		this.baseURL = _baseURL;
 	}
 
