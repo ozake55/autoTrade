@@ -24,7 +24,7 @@ public class LoginSbi extends Login {
 	
 	//ログイン専用
 	static final String startQuery = "_ControlID=WPLETlgR001Control&_DataStoreID=DSWPLETlgR001Control&_PageID=WPLETlgR001Rlgn50&_ActionID=login&getFlg=on";
-	
+	static final String loginFormName = "MyForm01";
 	//口座一覧
 	//static final String afterQuery = "_ControlID=WPLETacR001Control&_DataStoreID=DSWPLETacR001Control&_PageID=DefaultPID&_ActionID=DefaultAID&getFlg=on";
 	//ホーム
@@ -35,9 +35,7 @@ public class LoginSbi extends Login {
 	static final String logoutIndicateMes = "SBI証券をご利用いただきありがとうございました。";
 	
 	
-	///////
-	TradeUtil util = null;
-	///////
+
 
 	private LoginSbi(){
 		util = new UtilSbi(hostAndPath);
@@ -65,7 +63,7 @@ public class LoginSbi extends Login {
 		doc = res.parse();
 
 		// ログイン画面のinput tag を取得。ログイン後の画面によってform名が異なるので注意！
-		Elements form_login = doc.getElementsByAttributeValue("name", "MyForm01");
+		Elements form_login = doc.getElementsByAttributeValue("name", loginFormName);
 		if (form_login.isEmpty()) {
 			System.out.println("form_login = null");
 			throw new FailedToGetInputScreenException();
@@ -84,8 +82,6 @@ public class LoginSbi extends Login {
 		
 		param.put("user_id", userid);
 		param.put("user_password", password);
-		//param.put("user_id", "yamada");
-		//param.put("user_password", "tarou1234");
 		
 		//置き換え
 		//param.put("_ActionID", "loginAcInfo");
@@ -134,7 +130,7 @@ public class LoginSbi extends Login {
 
 		//Connection conn = sbiUtil.getConnect(logoutQuery);
 		//sbiUtil.formSwitch(conn.cookies(res.cookies()).method(Method.GET).execute());
-		doc = connectMethodGet(logoutQuery);
+		doc = conGetDocument(logoutQuery);
 		//System.out.println(doc.html());
 
 		Elements div = doc.getElementsByAttributeValue("class", "alC");
@@ -162,23 +158,21 @@ public class LoginSbi extends Login {
 	}
 	
 	
-	public Document connectMethodGet(String query) throws IOException {
-		res = conGet(query);
-		doc = res.parse();
-		return doc;
-	}
 
-	private Response conGet(String query) throws IOException {
-		
-		Connection conn = util.getConnect(query);
-		res = connectExp(conn.cookies(res.cookies()).method(Method.GET).execute());
+	@Override
+	protected Response connectMethodGet(String query) throws IOException {
+		Response _res = super.connectMethodGet(query);
+		res = connectExp(_res);
 		return res;
 	}
 	
-	private Response connectMethodPost(String query, HashMap<String, String> param) throws IOException {
-		Connection conn = util.getConnect(query);
+	@Override
+	protected Response connectMethodPost(String query, HashMap<String, String> param) throws IOException {
+		//Connection conn = util.getConnect(query);
+		//Response _res = conn.data(param).cookies(res.cookies()).method(Method.POST).execute();
 		// formSwitch＋ログイン
-		res = connectExp(conn.data(param).cookies(res.cookies()).method(Method.POST).execute());
+		Response _res = super.connectMethodPost(query, param);
+		res = connectExp(_res);
 		return res;
 	}
 	

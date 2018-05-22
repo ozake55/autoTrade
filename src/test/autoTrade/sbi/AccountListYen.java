@@ -50,7 +50,7 @@ public class AccountListYen implements InterfaceScreen {
 	
 	public boolean getScreen() throws IOException {
 
-		login.doc = login.connectMethodGet(accountListQuery);
+		login.doc = login.conGetDocument(accountListQuery);
 		
 		Elements div = login.doc.getElementsByAttributeValue("class", "title-text");
 		for (Element ele : div) {

@@ -9,6 +9,7 @@ import test.autoTrade.exception.FailedToGetInputScreenException;
 import test.autoTrade.sbi.AccountListYen;
 import test.autoTrade.sbi.InterfaceScreen;
 import test.autoTrade.sbi.LoginSbi;
+import test.autoTrade.*;
 
 public class AutoTrade {
 
@@ -17,10 +18,10 @@ public class AutoTrade {
 
 	public static void main(String[] args) throws IOException {
 
-		String userid = System.getenv("userid");
-		String password = System.getenv("password");
+		String userid = System.getenv("sbi_userid");
+		String password = System.getenv("sbi_password");
 
-		// TODO Auto-generated method stub
+		//castしない
 		LoginSbi loginProc = LoginSbi.getInstance();
 
 		// if ( ((Login) loginProc).login(userid, password) ) {
