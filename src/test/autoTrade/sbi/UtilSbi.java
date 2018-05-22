@@ -24,7 +24,7 @@ public class UtilSbi extends TradeUtil {
 	
 
 	UtilSbi(String _baseURL) {
-		this.baseURL = _baseURL;
+		super(_baseURL);
 	}
 
 	public String getBaseURL() {

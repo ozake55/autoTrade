@@ -12,6 +12,10 @@ import org.jsoup.select.Elements;
 public class TradeUtil {
 	public String baseURL = null;
 	
+	protected TradeUtil(String _baseURL) {
+		this.baseURL = _baseURL;
+	}
+	
 	public HashMap<String, String> getParam(Elements inputs) {
 		// ログイン
 		// formパラメータの設定
