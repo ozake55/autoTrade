@@ -13,6 +13,7 @@ import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
 import test.autoTrade.Login;
+import test.autoTrade.TradeUtil;
 import test.autoTrade.exception.FailedToGetInputScreenException;
 
 public class LoginSbi extends Login {
@@ -35,11 +36,11 @@ public class LoginSbi extends Login {
 	
 	
 	///////
-	UtilSbi sbiUtil = null;
+	TradeUtil util = null;
 	///////
 
 	private LoginSbi(){
-		sbiUtil = new UtilSbi(hostAndPath);
+		util = new UtilSbi(hostAndPath);
 	}
 	
 	public static LoginSbi getInstance() {
@@ -49,7 +50,7 @@ public class LoginSbi extends Login {
 	public boolean login(String userid, String password) throws IOException, FailedToGetInputScreenException {
 		
 		//ログイン前はformSwitch必要なし
-		Connection conn = sbiUtil.getConnect(startQuery);
+		Connection conn = util.getConnect(startQuery);
 		
 		//redirectを行いたくない場合は、.followRedirects(false).execute();
 		res = conn.method(Method.GET)
@@ -72,14 +73,14 @@ public class LoginSbi extends Login {
 
 		Elements inputs = form_login.get(0).getElementsByTag("input");
 
-		sbiUtil.getParam(inputs);
+		util.getParam(inputs);
 		////////
 		// ログイン
 		// formパラメータの設定
 		HashMap<String, String> param;
 		
 		//inputs elementからform param 生成
-		param = sbiUtil.getParam(inputs);
+		param = util.getParam(inputs);
 		
 		param.put("user_id", userid);
 		param.put("user_password", password);
@@ -169,13 +170,13 @@ public class LoginSbi extends Login {
 
 	private Response conGet(String query) throws IOException {
 		
-		Connection conn = sbiUtil.getConnect(query);
+		Connection conn = util.getConnect(query);
 		res = connectExp(conn.cookies(res.cookies()).method(Method.GET).execute());
 		return res;
 	}
 	
 	private Response connectMethodPost(String query, HashMap<String, String> param) throws IOException {
-		Connection conn = sbiUtil.getConnect(query);
+		Connection conn = util.getConnect(query);
 		// formSwitch＋ログイン
 		res = connectExp(conn.data(param).cookies(res.cookies()).method(Method.POST).execute());
 		return res;
@@ -183,7 +184,7 @@ public class LoginSbi extends Login {
 	
 	public Response connectExp(Response res) throws IOException {
 		// formSwitchはログイン時だけだと思う。。
-		res = sbiUtil.formSwitch(res);
+		res = ((UtilSbi) util).formSwitch(res);
 		
 		//sessionが切れているかチェック
 		
