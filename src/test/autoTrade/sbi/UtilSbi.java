@@ -1,6 +1,7 @@
 package test.autoTrade.sbi;
 
 import java.io.IOException;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -13,12 +14,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class UtilSbi {
+import test.autoTrade.Util;
+
+public class UtilSbi extends Util {
 	
 	static final String logoutMes = "口座をお持ちのお客様はログインしてください。";
 
 
-	String baseURL = null;
+	
 
 	UtilSbi(String _baseURL) {
 		this.baseURL = _baseURL;
