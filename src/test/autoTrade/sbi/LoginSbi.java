@@ -3,6 +3,7 @@ package test.autoTrade.sbi;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
@@ -11,6 +12,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import test.autoTrade.Login;
 import test.autoTrade.TradeUtil;
@@ -45,8 +51,8 @@ public class LoginSbi extends Login {
 		return loginSingleton;
 	}
 	
-	public boolean login(String userid, String password) throws IOException, FailedToGetInputScreenException {
-		
+	public boolean login(String loginJson) throws IOException, FailedToGetInputScreenException {
+				
 		//ログイン前はformSwitch必要なし
 		Connection conn = util.getConnect(startQuery);
 		
@@ -80,8 +86,26 @@ public class LoginSbi extends Login {
 		//inputs elementからform param 生成
 		param = util.getParam(inputs);
 		
-		param.put("user_id", userid);
-		param.put("user_password", password);
+		try {
+			Map<String, String> map = new HashMap<>();
+			ObjectMapper mapper = new ObjectMapper();
+			// convert JSON string to Map
+			map = mapper.readValue(loginJson, new TypeReference<Map<String, String>>(){});
+
+			for(Map.Entry<String, String> entry : map.entrySet()){
+				param.put(entry.getKey(), entry.getValue());
+				//System.out.println(entry.getKey() + ":" + entry.getValue());
+			}
+
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+
+		
 		
 		//置き換え
 		//param.put("_ActionID", "loginAcInfo");
