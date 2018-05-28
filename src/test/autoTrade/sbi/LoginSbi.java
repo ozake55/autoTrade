@@ -51,85 +51,22 @@ public class LoginSbi extends Login {
 		return loginSingleton;
 	}
 	
-	public boolean login(String loginJson) throws IOException, FailedToGetInputScreenException {
+	public boolean login(String loginInputParamJson) throws IOException, FailedToGetInputScreenException {
 				
-		//ログイン前はformSwitch必要なし
-		Connection conn = util.getConnect(startQuery);
-		
-		//redirectを行いたくない場合は、.followRedirects(false).execute();
-		res = conn.method(Method.GET)
-				//.followRedirects(false)
-				.execute();
-		
-		//resをチェック。302か307の場合はメンテナンス中と判断？それとも、redirect後、formが取れなかったらで判断？
-		//→通常のログイン画面でredirectしているか？
-		//
-		//maintenanceException
-		
-		doc = res.parse();
+		//loginInputParamJson={"user_id":"user_id", "user_password":"user_password", "_ActionID":"loginPortfolio"}
+		HashMap<String, String> param=super.getLoginForm(startQuery,loginFormName,loginInputParamJson);
 
-		// ログイン画面のinput tag を取得。ログイン後の画面によってform名が異なるので注意！
-		Elements form_login = doc.getElementsByAttributeValue("name", loginFormName);
-		if (form_login.isEmpty()) {
-			System.out.println("form_login = null");
-			throw new FailedToGetInputScreenException();
-		}
-
-		Elements inputs = form_login.get(0).getElementsByTag("input");
-
-		util.getParam(inputs);
-		////////
-		// ログイン
-		// formパラメータの設定
-		HashMap<String, String> param;
-		
-		//inputs elementからform param 生成
-		param = util.getParam(inputs);
-		
-		try {
-			Map<String, String> map = new HashMap<>();
-			ObjectMapper mapper = new ObjectMapper();
-			// convert JSON string to Map
-			map = mapper.readValue(loginJson, new TypeReference<Map<String, String>>(){});
-
-			for(Map.Entry<String, String> entry : map.entrySet()){
-				param.put(entry.getKey(), entry.getValue());
-				//System.out.println(entry.getKey() + ":" + entry.getValue());
-			}
-
-		} catch (JsonGenerationException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}		
-
-		
-		
-		//置き換え
+		//置き換える場合
 		//param.put("_ActionID", "loginAcInfo");
-		param.put("_ActionID", "loginPortfolio");
 		
+		//login POST request
 		res = connectMethodPost("",param);
 		
 		// ログイン後の画面
 		//doc = res.parse();
 		//System.out.println(doc.html());
-		
-		/////
-
 		////
-		// ログインできているか、response headerのcookieをチェック。
-		// 以後のresponseには新たなset-cookieは含まれないので注意
-		if (res.cookies().containsKey("trading_site")) {
-			System.out.println("login success");
-			return true;
-		} else {
-			
-			System.out.println("login false");
-			return false;
-		}
+		return super.loginDecision("trading_site");
 	}
 
 		////////
