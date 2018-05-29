@@ -24,6 +24,40 @@ import test.autoTrade.exception.FailedToGetInputScreenException;
 
 public class LoginSbi extends Login {
 	
+	public static void main(String[] args) throws IOException {
+		
+		String loginJson = System.getenv("sbi_login_json");
+		
+		//castどうすうる？
+		Login loginProc = LoginSbi.getInstance();
+
+		try {
+			if (loginProc.login(loginJson)) {
+				// ログイン成功
+
+				// LOGOUT
+				// loginProc.logout();
+
+				InterfaceScreen accountListYenProc = new AccountListYenSbi((LoginSbi) loginProc);
+
+				// 画面
+				if (accountListYenProc.getScreen()) {
+					System.out.println(loginProc.doc.html());
+				} else {
+
+					// LOGOUT 2回読んでも問題なし
+					// loginProc.logout();
+				}
+			}
+		} catch (IOException e) {
+
+		} catch (FailedToGetInputScreenException e) {
+			System.out.println("FailedToGetInputScreenException発生");			
+		}
+
+	}
+	
+	
 	private static LoginSbi loginSingleton = new LoginSbi();
 		
 	static final String hostAndPath = "https://site1.sbisec.co.jp" + "/ETGate/";
@@ -51,6 +85,7 @@ public class LoginSbi extends Login {
 		return loginSingleton;
 	}
 	
+	@Override
 	public boolean login(String loginInputParamJson) throws IOException, FailedToGetInputScreenException {
 				
 		//loginInputParamJson={"user_id":"user_id", "user_password":"user_password", "_ActionID":"loginPortfolio"}
@@ -68,20 +103,6 @@ public class LoginSbi extends Login {
 		////
 		return super.loginDecision("trading_site");
 	}
-
-		////////
-	/*
-	public void getScreen() throws IOException {
-	
-		// ログイン後の画面は口座画面かチェック（お知らせ等表示される場合がある）
-		// もしも、口座画面で無い場合、再度ログイン画面に遷移
-		Connection conn = sbiUtil.getConnect(afterQuery);
-		// formSwitchはログイン時だけだと思う。。
-		// res = conn.cookies(res.cookies()).method(Method.GET).execute();
-		res = sbiUtil.formSwitch(conn.cookies(res.cookies()).method(Method.GET).execute());
-		//Document doc = res.parse();
-	}
-	*/
 	
 	boolean logout() throws IOException {
 		

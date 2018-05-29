@@ -26,6 +26,11 @@ public class Login {
 	protected TradeUtil util = null;
 	///////
 	
+	public boolean login(String loginInputParamJson) throws IOException, FailedToGetInputScreenException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 	public HashMap<String, String> getLoginForm(String startQuery, String loginFormName, String loginInputParamJson) throws IOException, FailedToGetInputScreenException {
 		// ログイン前はformSwitch必要なし
 		Connection conn = util.getConnect(startQuery);
@@ -118,5 +123,7 @@ public class Login {
 		Response _res = conn.data(param).cookies(res.cookies()).method(Method.POST).execute();
 		return _res;
 	}
+
+
 
 }
