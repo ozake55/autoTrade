@@ -67,6 +67,7 @@ public class LoginSbi extends Login {
 	//ログイン専用
 	static final String startQuery = "_ControlID=WPLETlgR001Control&_DataStoreID=DSWPLETlgR001Control&_PageID=WPLETlgR001Rlgn50&_ActionID=login&getFlg=on";
 	static final String loginFormName = "MyForm01";
+	
 	//口座一覧
 	//static final String afterQuery = "_ControlID=WPLETacR001Control&_DataStoreID=DSWPLETacR001Control&_PageID=DefaultPID&_ActionID=DefaultAID&getFlg=on";
 	//ホーム
