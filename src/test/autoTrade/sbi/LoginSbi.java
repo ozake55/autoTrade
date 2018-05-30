@@ -1,6 +1,7 @@
 package test.autoTrade.sbi;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +25,11 @@ import test.autoTrade.exception.FailedToGetInputScreenException;
 
 public class LoginSbi extends Login {
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, URISyntaxException {
 		
 		String loginJson = System.getenv("sbi_login_json");
 		
-		//castどうすうる？
+		//castどうする？
 		Login loginProc = LoginSbi.getInstance();
 
 		try {
@@ -38,7 +39,7 @@ public class LoginSbi extends Login {
 				// LOGOUT
 				// loginProc.logout();
 
-				InterfaceScreen accountListYenProc = new AccountListYenSbi((LoginSbi) loginProc);
+				InterfaceScreen accountListYenProc = new AccountListYenSbi(loginProc);
 
 				// 画面
 				if (accountListYenProc.getScreen()) {
@@ -58,7 +59,6 @@ public class LoginSbi extends Login {
 	}
 	
 	
-	private static LoginSbi loginSingleton = new LoginSbi();
 		
 	static final String hostAndPath = "https://site1.sbisec.co.jp" + "/ETGate/";
 	
@@ -74,9 +74,9 @@ public class LoginSbi extends Login {
 
 	static final String logoutIndicateMes = "SBI証券をご利用いただきありがとうございました。";
 	
-	
-
-
+	////////
+	//
+	private static LoginSbi loginSingleton = new LoginSbi();
 	private LoginSbi(){
 		util = new UtilSbi(hostAndPath);
 	}
@@ -86,7 +86,7 @@ public class LoginSbi extends Login {
 	}
 	
 	@Override
-	public boolean login(String loginInputParamJson) throws IOException, FailedToGetInputScreenException {
+	public boolean login(String loginInputParamJson) throws IOException, FailedToGetInputScreenException, URISyntaxException {
 				
 		//loginInputParamJson={"user_id":"user_id", "user_password":"user_password", "_ActionID":"loginPortfolio"}
 		HashMap<String, String> param=super.getLoginForm(startQuery,loginFormName,loginInputParamJson);
@@ -104,7 +104,7 @@ public class LoginSbi extends Login {
 		return super.loginDecision("trading_site");
 	}
 	
-	boolean logout() throws IOException {
+	boolean logout() throws IOException, URISyntaxException {
 		
 		if (res == null) {
 			return false;
@@ -142,14 +142,14 @@ public class LoginSbi extends Login {
 	
 
 	@Override
-	protected Response connectMethodGet(String query) throws IOException {
+	protected Response connectMethodGet(String query) throws IOException, URISyntaxException {
 		Response _res = super.connectMethodGet(query);
 		res = connectExp(_res);
 		return res;
 	}
 	
 	@Override
-	protected Response connectMethodPost(String query, HashMap<String, String> param) throws IOException {
+	protected Response connectMethodPost(String query, HashMap<String, String> param) throws IOException, URISyntaxException {
 		//Connection conn = util.getConnect(query);
 		//Response _res = conn.data(param).cookies(res.cookies()).method(Method.POST).execute();
 		// formSwitch＋ログイン
@@ -158,7 +158,7 @@ public class LoginSbi extends Login {
 		return res;
 	}
 	
-	public Response connectExp(Response res) throws IOException {
+	public Response connectExp(Response res) throws IOException, URISyntaxException {
 		// formSwitchはログイン時だけだと思う。。
 		res = ((UtilSbi) util).formSwitch(res);
 		

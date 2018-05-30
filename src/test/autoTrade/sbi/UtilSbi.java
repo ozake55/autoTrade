@@ -3,6 +3,7 @@ package test.autoTrade.sbi;
 import java.io.IOException;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 
@@ -20,18 +21,17 @@ public class UtilSbi extends TradeUtil {
 	
 	static final String logoutMes = "口座をお持ちのお客様はログインしてください。";
 
-
-	
-
 	UtilSbi(String _baseURL) {
 		super(_baseURL);
 	}
 
+	/*
 	public String getBaseURL() {
 		return baseURL;
 	}
+	*/
 
-	public Response formSwitch(Response res) throws IOException {
+	public Response formSwitch(Response res) throws IOException, URISyntaxException {
 
 		
 		Connection conn = null;
@@ -51,7 +51,8 @@ public class UtilSbi extends TradeUtil {
 
 		if (!formSwitch.isEmpty()) {
 
-			this.baseURL = formSwitch.attr("action");
+			//ここでbaseURLをset
+			baseURL = formSwitch.attr("action");
 
 			Elements formSwitch_inputs = formSwitch.get(0).getElementsByTag("input");
 			// ログインに必要なパラメータの設定

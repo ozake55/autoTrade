@@ -1,6 +1,7 @@
 package test.autoTrade.sbi;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import org.jsoup.Connection;
@@ -11,45 +12,27 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
+import test.autoTrade.Login;
+
 public class AccountListYenSbi implements InterfaceScreen {
 	
+	Login login = null;
+
 	//static final String accountListQuery = "_ControlID=WPLETacR001Control&_DataStoreID=DSWPLETacR001Control&_PageID=DefaultPID&_ActionID=DefaultAID&getFlg=on";
 	static final String accountListQuery = "_ControlID=WPLETacR001Control&_PageID=WPLETacR001Rlst10&_DataStoreID=DSWPLETacR001Control&getFlg=on&_ActionID=displayBK&gamen_status=A&gamen_status2=B&gamen_status3=S&account_get_kbn=2";
 
 	static final String AccountListYenIndicateMes = "口座サマリー";
 	
-	
-	
-	//それ以外はエラー
-
-	LoginSbi login = null;
 	///////
-
-	public LoginSbi getLogin() {
-		return login;
-	}
-
-	public void setLogin(LoginSbi login) {
-		this.login = login;
-	}
 
 	/*
 	 * コンストラクタ
 	 */
-	public AccountListYenSbi(LoginSbi _login){
+	public AccountListYenSbi(Login _login){
 		login = _login;
 	}
-
-	/*
-	public Response getRes() {
-		return res;
-	}
-	public SbiUtil getSbiUtil() {
-		return sbiUtil;
-	}
-	*/
 	
-	public boolean getScreen() throws IOException {
+	public boolean getScreen() throws IOException, URISyntaxException {
 
 		login.doc = login.conGetDocument(accountListQuery);
 		

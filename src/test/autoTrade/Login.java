@@ -1,6 +1,7 @@
 package test.autoTrade;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,12 +27,12 @@ public class Login {
 	protected TradeUtil util = null;
 	///////
 	
-	public boolean login(String loginInputParamJson) throws IOException, FailedToGetInputScreenException {
+	public boolean login(String loginInputParamJson) throws IOException, FailedToGetInputScreenException, URISyntaxException {
 		// TODO Auto-generated method stub
 		return false;
 	}
 	
-	public HashMap<String, String> getLoginForm(String startQuery, String loginFormName, String loginInputParamJson) throws IOException, FailedToGetInputScreenException {
+	public HashMap<String, String> getLoginForm(String startQuery, String loginFormName, String loginInputParamJson) throws IOException, FailedToGetInputScreenException, URISyntaxException {
 		// ログイン前はformSwitch必要なし
 		Connection conn = util.getConnect(startQuery);
 
@@ -46,6 +47,7 @@ public class Login {
 		// maintenanceException
 
 		doc = res.parse();
+		System.out.print(doc);
 		//return doc;
 		
 		// ログイン画面のinput tag を取得。ログイン後の画面によってform名が異なるので注意！
@@ -57,7 +59,6 @@ public class Login {
 
 		Elements inputs = form_login.get(0).getElementsByTag("input");
 
-		util.getParam(inputs);
 		////////
 		// ログイン
 		// formパラメータの設定
@@ -105,21 +106,21 @@ public class Login {
 	}
 
 	
-	public Document conGetDocument(String query) throws IOException {
+	public Document conGetDocument(String query) throws IOException, URISyntaxException {
 		
 		res = connectMethodGet(query);
 		doc = res.parse();
 		return doc;
 	}
 	
-	protected Response connectMethodGet(String query) throws IOException {
-		Connection conn = util.getConnect(query);
+	protected Response connectMethodGet(String urlStr) throws IOException, URISyntaxException {
+		Connection conn = util.getConnect(urlStr);
 		Response _res = conn.cookies(res.cookies()).method(Method.GET).execute();
 		return _res;
 	}
 	
-	protected Response connectMethodPost(String query, HashMap<String, String> param) throws IOException {
-		Connection conn = util.getConnect(query);
+	protected Response connectMethodPost(String urlStr, HashMap<String, String> param) throws IOException,  URISyntaxException  {
+		Connection conn = util.getConnect(urlStr);
 		Response _res = conn.data(param).cookies(res.cookies()).method(Method.POST).execute();
 		return _res;
 	}
