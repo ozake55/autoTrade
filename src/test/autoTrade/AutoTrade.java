@@ -9,7 +9,6 @@ import org.jsoup.nodes.Document;
 
 import test.autoTrade.exception.FailedToGetInputScreenException;
 import test.autoTrade.sbi.AccountListYenSbi;
-import test.autoTrade.sbi.InterfaceScreen;
 import test.autoTrade.sbi.LoginSbi;
 import test.autoTrade.*;
 

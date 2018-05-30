@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
+import test.autoTrade.InterfaceScreen;
 import test.autoTrade.Login;
 import test.autoTrade.TradeUtil;
 import test.autoTrade.exception.FailedToGetInputScreenException;
 import test.autoTrade.sbi.AccountListYenSbi;
-import test.autoTrade.sbi.InterfaceScreen;
 import test.autoTrade.sbi.LoginSbi;
 import test.autoTrade.sbi.UtilSbi;
 
@@ -68,7 +68,6 @@ public class LoginRakuten extends Login {
 	
 	@Override
 	public boolean login(String loginInputParamJson) throws IOException, FailedToGetInputScreenException, URISyntaxException {
-		//loginInputParamJson={"user_id":"user_id", "user_password":"user_password", "_ActionID":"loginPortfolio"}
 		HashMap<String, String> param=super.getLoginForm(startUrl,loginFormName,loginInputParamJson);
 		
 		//login POST request
@@ -78,8 +77,17 @@ public class LoginRakuten extends Login {
 		doc = res.parse();
 		System.out.println(doc.html());
 		
-		//Rg_sec or checkTk どっち？
-		return super.loginDecision("Rg_sec");
+		//ログイン成功したかチェック
+		boolean loginFlg = super.loginDecision("Rg_sec");			//Rg_sec or checkTk どっち？
+		
+		if (loginFlg) {
+			//楽天の場合、ホーム画面からURLを取得するので、ホーム画面かどうかチェック
+			
+			//ホーム画面から口座一覧URL取得
+			//super.accountListYenUrl =
+		}
+		
+		return loginFlg;
 		
 	}
 }

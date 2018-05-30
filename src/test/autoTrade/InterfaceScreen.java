@@ -1,9 +1,7 @@
-package test.autoTrade.sbi;
+package test.autoTrade;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-
-import test.autoTrade.Login;
 
 public interface InterfaceScreen {
 	//Login getLogin();

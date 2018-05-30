@@ -27,6 +27,8 @@ public class Login {
 	protected TradeUtil util = null;
 	///////
 	
+	public String accountListYenUrl = null;
+	
 	public boolean login(String loginInputParamJson) throws IOException, FailedToGetInputScreenException, URISyntaxException {
 		// TODO Auto-generated method stub
 		return false;

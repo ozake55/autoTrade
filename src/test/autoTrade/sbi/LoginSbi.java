@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import test.autoTrade.InterfaceScreen;
 import test.autoTrade.Login;
 import test.autoTrade.TradeUtil;
 import test.autoTrade.exception.FailedToGetInputScreenException;
@@ -43,6 +44,7 @@ public class LoginSbi extends Login {
 
 				// 画面
 				if (accountListYenProc.getScreen()) {
+					//screen取得成功
 					System.out.println(loginProc.doc.html());
 				} else {
 
@@ -101,7 +103,16 @@ public class LoginSbi extends Login {
 		//doc = res.parse();
 		//System.out.println(doc.html());
 		////
-		return super.loginDecision("trading_site");
+		
+		//ログイン成功したかチェック
+		boolean loginFlg = super.loginDecision("trading_site");
+		
+		if (loginFlg) {
+			//SBIの場合、一覧画面のURLは固定
+			super.accountListYenUrl = AccountListYenSbi.accountListQuery;
+		}
+		
+		return loginFlg;
 	}
 	
 	boolean logout() throws IOException, URISyntaxException {

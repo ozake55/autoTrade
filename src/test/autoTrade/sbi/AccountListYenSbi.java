@@ -12,6 +12,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
+import test.autoTrade.InterfaceScreen;
 import test.autoTrade.Login;
 
 public class AccountListYenSbi implements InterfaceScreen {
@@ -32,9 +33,10 @@ public class AccountListYenSbi implements InterfaceScreen {
 		login = _login;
 	}
 	
+	@Override
 	public boolean getScreen() throws IOException, URISyntaxException {
 
-		login.doc = login.conGetDocument(accountListQuery);
+		login.doc = login.conGetDocument(login.accountListYenUrl);
 		
 		Elements div = login.doc.getElementsByAttributeValue("class", "title-text");
 		for (Element ele : div) {
