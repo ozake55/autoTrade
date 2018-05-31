@@ -22,6 +22,7 @@ public class Login {
 	
 	public Document doc = null;
 	public Response res = null;
+	public String jsessionid = null;
 
 	///////
 	protected TradeUtil util = null;

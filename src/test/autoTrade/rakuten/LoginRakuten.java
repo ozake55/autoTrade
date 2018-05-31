@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
+import org.jsoup.select.Elements;
+
 import test.autoTrade.InterfaceScreen;
 import test.autoTrade.Login;
 import test.autoTrade.TradeUtil;
@@ -19,6 +21,9 @@ public class LoginRakuten extends Login {
 	static final String startUrl = "https://www.rakuten-sec.co.jp/ITS/V_ACT_Login.html";
 	static final String loginUrl = "https://member.rakuten-sec.co.jp/app/Login.do";
 	static final String loginFormName = "loginform";
+	static final String jsessionName = "BV_SessionID";
+	
+	private String session = null;
 	
 	private static LoginRakuten loginSingleton = new LoginRakuten();
 	private LoginRakuten(){
@@ -83,7 +88,35 @@ public class LoginRakuten extends Login {
 		if (loginFlg) {
 			//楽天の場合、ホーム画面からURLを取得するので、ホーム画面かどうかチェック
 			
-			//ホーム画面から口座一覧URL取得
+			//BV_SessionIDを取得
+			Elements form_login = doc.getElementsByAttributeValue("id", "siteID");
+			if (form_login.isEmpty()) {
+				System.out.println("form_login = null");
+				//変更必要
+				throw new FailedToGetInputScreenException();
+			}
+
+			Elements a = form_login.get(0).getElementsByTag("a");
+			if (a.isEmpty()) {
+				System.out.println("a = null");
+				//変更必要
+				throw new FailedToGetInputScreenException();
+			}
+
+			String href  = a.get(0).attr("href");
+			if (href.isEmpty()) {
+				System.out.println("href = null");
+				//変更必要
+				throw new FailedToGetInputScreenException();
+			}
+			System.out.println(href);
+			jsessionid = href.substring(href.indexOf(jsessionName+"=")+13, href.indexOf("?"));
+			System.out.println(jsessionid);
+			
+			//口座一覧のテンプレートにBV_SessionIDをセット
+			
+			
+			//ホーム画面から口座一覧URL取得して設定
 			//super.accountListYenUrl =
 		}
 		
