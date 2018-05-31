@@ -1,6 +1,7 @@
 package test.autoTrade.sbi;
 
 import java.io.IOException;
+
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
@@ -23,10 +24,11 @@ import test.autoTrade.InterfaceScreen;
 import test.autoTrade.Login;
 import test.autoTrade.TradeUtil;
 import test.autoTrade.exception.FailedToGetInputScreenException;
+import test.autoTrade.exception.ResponseAnalysisException;
 
 public class LoginSbi extends Login {
 	
-	public static void main(String[] args) throws IOException, URISyntaxException {
+	public static void main(String[] args) throws IOException, URISyntaxException, ResponseAnalysisException {
 		
 		String loginJson = System.getenv("sbi_login_json");
 		

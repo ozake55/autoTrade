@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import test.autoTrade.exception.FailedToGetInputScreenException;
+import test.autoTrade.exception.ResponseAnalysisException;
 
 public class Login {
 	
@@ -30,7 +31,7 @@ public class Login {
 	
 	public String accountListYenUrl = null;
 	
-	public boolean login(String loginInputParamJson) throws IOException, FailedToGetInputScreenException, URISyntaxException {
+	public boolean login(String loginInputParamJson) throws IOException, URISyntaxException, FailedToGetInputScreenException, ResponseAnalysisException {
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -1,7 +1,9 @@
 package test.autoTrade.rakuten;
 
 import java.io.IOException;
+
 import java.net.URISyntaxException;
+import java.text.MessageFormat;
 import java.util.HashMap;
 
 import org.jsoup.select.Elements;
@@ -10,6 +12,7 @@ import test.autoTrade.InterfaceScreen;
 import test.autoTrade.Login;
 import test.autoTrade.TradeUtil;
 import test.autoTrade.exception.FailedToGetInputScreenException;
+import test.autoTrade.exception.ResponseAnalysisException;
 import test.autoTrade.sbi.AccountListYenSbi;
 import test.autoTrade.sbi.LoginSbi;
 import test.autoTrade.sbi.UtilSbi;
@@ -31,7 +34,7 @@ public class LoginRakuten extends Login {
 	}
 	
 	
-	public static void main(String[] args) throws URISyntaxException {
+	public static void main(String[] args) throws URISyntaxException, ResponseAnalysisException {
 		// TODO Auto-generated method stub
 		String loginJson = System.getenv("rakuten_login_json");
 		
@@ -41,23 +44,23 @@ public class LoginRakuten extends Login {
 		try {
 			if (loginProc.login(loginJson)) {
 
-				/*
+				
 				// ログイン成功
 
 				// LOGOUT
 				// loginProc.logout();
 
-				InterfaceScreen accountListYenProc = new AccountListYen(loginProc);
+				InterfaceScreen accountListYenProc = new AccountListYenRakuten(loginProc);
 
 				// 画面
 				if (accountListYenProc.getScreen()) {
 					System.out.println(loginProc.doc.html());
 				} else {
-
+					System.out.println(loginProc.doc.html());
 					// LOGOUT 2回読んでも問題なし
 					// loginProc.logout();
 				}
-				*/
+				
 			}
 		} catch (IOException e) {
 
@@ -72,7 +75,7 @@ public class LoginRakuten extends Login {
 	}
 	
 	@Override
-	public boolean login(String loginInputParamJson) throws IOException, FailedToGetInputScreenException, URISyntaxException {
+	public boolean login(String loginInputParamJson) throws IOException, URISyntaxException, FailedToGetInputScreenException, ResponseAnalysisException {
 		HashMap<String, String> param=super.getLoginForm(startUrl,loginFormName,loginInputParamJson);
 		
 		//login POST request
@@ -91,29 +94,24 @@ public class LoginRakuten extends Login {
 			//BV_SessionIDを取得
 			Elements form_login = doc.getElementsByAttributeValue("id", "siteID");
 			if (form_login.isEmpty()) {
-				System.out.println("form_login = null");
-				//変更必要
-				throw new FailedToGetInputScreenException();
+				throw new ResponseAnalysisException("doc.getElementsByAttributeValue(\"id\", \"siteID\")");
 			}
 
 			Elements a = form_login.get(0).getElementsByTag("a");
 			if (a.isEmpty()) {
-				System.out.println("a = null");
-				//変更必要
-				throw new FailedToGetInputScreenException();
+				throw new ResponseAnalysisException("form_login.get(0).getElementsByTag(\"a\")");
 			}
 
 			String href  = a.get(0).attr("href");
 			if (href.isEmpty()) {
-				System.out.println("href = null");
-				//変更必要
-				throw new FailedToGetInputScreenException();
+				throw new ResponseAnalysisException("a.get(0).attr(\"href\")");
 			}
-			System.out.println(href);
-			jsessionid = href.substring(href.indexOf(jsessionName+"=")+13, href.indexOf("?"));
-			System.out.println(jsessionid);
+			
+			super.jsessionid = href.substring(href.indexOf(jsessionName+"=")+13, href.indexOf("?"));
 			
 			//口座一覧のテンプレートにBV_SessionIDをセット
+			super.accountListYenUrl = MessageFormat.format(AccountListYenRakuten.accountListTemplate, super.jsessionid);
+			//System.out.println(super.accountListYenUrl);
 			
 			
 			//ホーム画面から口座一覧URL取得して設定
