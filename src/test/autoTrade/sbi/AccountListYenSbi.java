@@ -38,6 +38,7 @@ public class AccountListYenSbi implements InterfaceScreen {
 
 		login.doc = login.conGetDocument(login.accountListYenUrl);
 		
+		boolean result = false;
 		Elements div = login.doc.getElementsByAttributeValue("class", "title-text");
 		for (Element ele : div) {
 			List<Node> nodes = ele.childNodes();
@@ -48,13 +49,15 @@ public class AccountListYenSbi implements InterfaceScreen {
 						//口座サマリー
 						System.out.println(element.childNode(0).toString().trim());
 						if (AccountListYenIndicateMes.equals(element.childNode(0).toString().trim())) {
-							return true;							
+							result = true;
+							getAccountList();
+							return result;
 						}
 					}
 				}
 			}
 		}
-		return false;
+		return result;
 	
 
 		/*
@@ -64,6 +67,29 @@ public class AccountListYenSbi implements InterfaceScreen {
 		login.setRes(res);
 		*/
 	}
+	
+	public boolean getAccountList() {
+		//テキストの含まれるelementの親を逆階層順に取得
+		boolean result = false;
+		Elements genToku = login.doc.getElementsContainingOwnText("株式（現物/特定預り）");
+		if (!genToku.isEmpty()) {
+			//株式（現物/特定預り）有
+			
+			//３階層遡ったelementを取得
+			Element genTokuParent = genToku.parents().get(3);
+			
+			//genToku table
+			Elements genTokuTable = genTokuParent.children();
+
+			// 最初のtitle２行を削除
+			Elements genTokuContents = genTokuTable.next().next();
+			
+			// System.out.println(children);
+			result = true;
+		}
+		return result;
+	}
+
 	
 }
 
