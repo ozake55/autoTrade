@@ -88,31 +88,30 @@ public class LoginRakuten extends Login {
 		//ログイン成功したかチェック
 		boolean loginFlg = super.loginDecision("Rg_sec");			//Rg_sec or checkTk どっち？
 		
-		if (loginFlg) {
-			//楽天の場合、ホーム画面からURLを取得するので、ホーム画面かどうかチェック
+		if (loginFlg) {			
+			//BV_SessionIDを取得する。
 			
-			//BV_SessionIDを取得
+			//siteIDのelementsを取得
 			Elements form_login = doc.getElementsByAttributeValue("id", "siteID");
 			if (form_login.isEmpty()) {
 				throw new ResponseAnalysisException("doc.getElementsByAttributeValue(\"id\", \"siteID\")");
 			}
-
+			//siteID elements内の<a> tag elementを取得
 			Elements a = form_login.get(0).getElementsByTag("a");
 			if (a.isEmpty()) {
 				throw new ResponseAnalysisException("form_login.get(0).getElementsByTag(\"a\")");
 			}
-
+			//<a>tagのhref属性の値を取得
 			String href  = a.get(0).attr("href");
 			if (href.isEmpty()) {
 				throw new ResponseAnalysisException("a.get(0).attr(\"href\")");
 			}
-			
+			//href属性値からjsessionIDを取得
 			super.jsessionid = href.substring(href.indexOf(jsessionName+"=")+13, href.indexOf("?"));
 			
 			//口座一覧のテンプレートにBV_SessionIDをセット
 			super.accountListYenUrl = MessageFormat.format(AccountListYenRakuten.accountListTemplate, super.jsessionid);
 			//System.out.println(super.accountListYenUrl);
-			
 			
 			//ホーム画面から口座一覧URL取得して設定
 			//super.accountListYenUrl =

@@ -2,7 +2,9 @@ package test.autoTrade.sbi;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
@@ -40,26 +42,14 @@ public class AccountListYenSbi implements InterfaceScreen {
 		
 		boolean result = false;
 		Elements div = login.doc.getElementsByAttributeValue("class", "title-text");
-		for (Element ele : div) {
-			List<Node> nodes = ele.childNodes();
-			for (Node node : nodes) {
-				if (node instanceof Element) {
-					Elements p = ((Element) node).getElementsByTag("b");
-					for (Element element : p) {
-						//口座サマリー
-						System.out.println(element.childNode(0).toString().trim());
-						if (AccountListYenIndicateMes.equals(element.childNode(0).toString().trim())) {
-							result = true;
-							getAccountList();
-							return result;
-						}
-					}
-				}
-			}
+		Element targetEle = div.get(0).child(0);
+		//System.out.println(targetEle.text().trim());
+		if (AccountListYenIndicateMes.equals(targetEle.text().trim())) {
+			return getAccountList();
 		}
+		
 		return result;
 	
-
 		/*
 		SbiUtil sbiUtil = login.getSbiUtil();
 		Connection conn = sbiUtil.getConnect(accountListQuery);
@@ -76,14 +66,42 @@ public class AccountListYenSbi implements InterfaceScreen {
 			//株式（現物/特定預り）有
 			
 			//３階層遡ったelementを取得
-			Element genTokuParent = genToku.parents().get(3);
+			Element stockListParent = genToku.parents().get(3);
 			
-			//genToku table
-			Elements genTokuTable = genTokuParent.children();
+			//table
+			Elements stockListTable = stockListParent.children();
 
 			// 最初のtitle２行を削除
-			Elements genTokuContents = genTokuTable.next().next();
+			Elements stockList = stockListTable.next().next();
+		
+			//保有銘柄数
+			int numberOfStocks=stockList.size()/2;
 			
+			Map<String, String> stockInfoMap = new HashMap<String, String>();
+			stockInfoMap.put("stockCompany", "sbi");
+			
+			//最初の<TD>node
+			for(int i=0; i<numberOfStocks; i++) {
+				Element stockInfoEle = stockList.get(i*2);
+				
+				//StockInfo行の左<TD>				
+				Element stockCodeEle = stockInfoEle.child(0);
+				//codeの取得
+				//文字列を、" "（空白）を区切り文字として2つに分割。[0]がcode
+				String[] StockInfoArray = stockCodeEle.text().trim().split(" ",2);
+				//int code = Integer.parseInt(StockInfoArray[0].trim());
+				String stockCode =  StockInfoArray[0].trim();
+				stockInfoMap.put("stockCode", stockCode);
+				
+				//nameのElement取得（<a>tag）
+				Element stockNameEle = stockCodeEle.child(0);
+				String stockName = stockNameEle.text().trim();
+				stockInfoMap.put("stockName", stockName);
+				
+				//System.out.println(stockCodeAndNameEle.childNode(0).toString());
+				Element stockValueEle = stockList.get(i*2+1);
+				System.out.println(stockValueEle);
+			}
 			// System.out.println(children);
 			result = true;
 		}
