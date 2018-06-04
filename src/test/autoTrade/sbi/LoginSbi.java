@@ -2,6 +2,8 @@ package test.autoTrade.sbi;
 
 import java.io.IOException;
 
+
+
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +42,7 @@ public class LoginSbi extends Login {
 				// ログイン成功
 
 				// LOGOUT
-				// loginProc.logout();
+				loginProc.logout();
 
 				InterfaceScreen accountListYenProc = new AccountListYenSbi(loginProc);
 
@@ -118,7 +120,8 @@ public class LoginSbi extends Login {
 		return loginFlg;
 	}
 	
-	boolean logout() throws IOException, URISyntaxException {
+	@Override
+	public boolean logout() throws IOException, URISyntaxException {
 		
 		if (res == null) {
 			return false;

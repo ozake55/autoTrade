@@ -129,6 +129,14 @@ public class Login {
 		return _res;
 	}
 
+	public boolean logout() throws IOException, URISyntaxException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+
 
 
 }
