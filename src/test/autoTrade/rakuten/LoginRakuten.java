@@ -110,7 +110,7 @@ public class LoginRakuten extends Login {
 			super.jsessionid = href.substring(href.indexOf(jsessionName+"=")+13, href.indexOf("?"));
 			
 			//口座一覧のテンプレートにBV_SessionIDをセット
-			super.accountListYenUrl = MessageFormat.format(AccountListYenRakuten.accountListTemplate, super.jsessionid);
+			super.accountListYenHoldingsUrl = MessageFormat.format(AccountListYenRakuten.accountListTemplate, super.jsessionid);
 			//System.out.println(super.accountListYenUrl);
 			
 			//ホーム画面から口座一覧URL取得して設定

@@ -42,7 +42,7 @@ public class LoginSbi extends Login {
 				// ログイン成功
 
 				// LOGOUT
-				loginProc.logout();
+				//sloginProc.logout();
 
 				InterfaceScreen accountListYenProc = new AccountListYenSbi(loginProc);
 
@@ -114,7 +114,8 @@ public class LoginSbi extends Login {
 		
 		if (loginFlg) {
 			//SBIの場合、一覧画面のURLは固定
-			super.accountListYenUrl = AccountListYenSbi.accountListQuery;
+			super.accountListYenHoldingsUrl = AccountListYenSbi.accountListYenHoldingsQuery;
+			super.accountListYenOpenInterestUrl = AccountListYenSbi.accountListYenOpenInterestQuery;
 		}
 		
 		return loginFlg;

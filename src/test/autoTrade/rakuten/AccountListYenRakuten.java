@@ -28,7 +28,7 @@ public class AccountListYenRakuten implements InterfaceScreen {
 	@Override
 	public boolean getScreen() throws IOException, URISyntaxException {
 		// TODO Auto-generated method stub
-		login.doc = login.conGetDocument(login.accountListYenUrl);
+		login.doc = login.conGetDocument(login.accountListYenHoldingsUrl);
 		return false;
 	}
 
