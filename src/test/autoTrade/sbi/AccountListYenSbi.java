@@ -59,13 +59,16 @@ public class AccountListYenSbi implements InterfaceScreen {
 	}
 	
 	public boolean getAccountListYenHoldings() {
+		
 		//テキストの含まれるelementの親を逆階層順に取得
 		boolean result = false;
-		Elements genToku = login.doc.getElementsContainingOwnText("株式（現物/特定預り）");
+		//Elements genToku = login.doc.getElementsContainingOwnText("株式（現物/特定預り）");
+		Elements genToku = login.doc.getElementsContainingOwnText("株式（特定預り）");
 		if (!genToku.isEmpty()) {
 			//株式（現物/特定預り）有
 			
 			//３階層遡ったelementを取得
+			Elements test = genToku.parents();
 			Element stockListParent = genToku.parents().get(3);
 			
 			//table
